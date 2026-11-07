@@ -14,7 +14,7 @@ from typing import Any
 
 from mcp.server.mcpserver import MCPServer
 
-from . import trim
+from . import analytics, trim
 from .client import GarminClient
 
 logging.basicConfig(stream=sys.stderr, level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
@@ -124,9 +124,60 @@ def hrv(date: str) -> dict[str, Any]:
 def hrv_range(start: str, end: str) -> list[dict[str, Any]]:
     """Daily HRV summaries across a date range (YYYY-MM-DD, inclusive, max 92 days)."""
     s, e = _range(start, end)
-    raw = _client().get(f"/hrv-service/hrv/daily/{s}/{e}") or {}
-    items = raw.get("hrvSummaries", []) if isinstance(raw, dict) else raw
+    items: list[Any] = []
+    for cs, ce in _chunks(s, e, CHUNK_DAYS):
+        raw = _client().get(f"/hrv-service/hrv/daily/{cs}/{ce}") or {}
+        items += raw.get("hrvSummaries", []) if isinstance(raw, dict) else raw
     return [trim.hrv({"hrvSummary": x}) for x in items]
+
+
+def _search_all(start: str, end: str) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for page in range(20):  # 2,000 activities is far beyond a 92-day window
+        batch = _client().get(
+            "/activitylist-service/activities/search/activities",
+            {"startDate": start, "endDate": end, "limit": 100, "start": page * 100},
+        ) or []
+        out += batch
+        if len(batch) < 100:
+            break
+    return out
+
+
+@mcp.tool()
+def training_summary(start: str, end: str) -> dict[str, Any]:
+    """Weekly training and recovery totals between two dates (YYYY-MM-DD, inclusive, max 92 days).
+
+    Per ISO week (Monday start): activity counts by type, training load, run km/time/pace/longest,
+    minutes in each HR zone with easy (z1-z2) and hard (z4-z5) share, resting HR, stress,
+    Body Battery, steps, sleep hours and score, HRV and HRV status days, plus week-on-week
+    change in run km and load. Use this first for a weekly review, then drill in with
+    get_activity, sleep or hrv.
+    """
+    s, e = _range(start, end)
+    c = _client()
+    acts = _search_all(s, e)
+    days, sleeps, hrvs = [], [], []
+    # Range endpoints reject long windows (sleep returned HTTP 400 at 34 days in live testing;
+    # the spec gives no limit), so fetch in chunks.
+    for cs, ce in _chunks(s, e, CHUNK_DAYS):
+        days += (c.get("/usersummary-service/v2/dailysummaries", {"startDate": cs, "endDate": ce}) or {}).get("data") or []
+        sleeps += c.get("/sleep-service/sleep/dailySleepSummariesByDate", {"startDate": cs, "endDate": ce}) or []
+        hrv_raw = c.get(f"/hrv-service/hrv/daily/{cs}/{ce}") or {}
+        hrvs += hrv_raw.get("hrvSummaries", []) if isinstance(hrv_raw, dict) else hrv_raw
+    return analytics.weekly_summary(dt.date.fromisoformat(s), dt.date.fromisoformat(e), acts, days, sleeps, hrvs)
+
+
+CHUNK_DAYS = 28
+
+
+def _chunks(start: str, end: str, size: int) -> list[tuple[str, str]]:
+    s, e, out = dt.date.fromisoformat(start), dt.date.fromisoformat(end), []
+    while s <= e:
+        ce = min(s + dt.timedelta(days=size - 1), e)
+        out.append((s.isoformat(), ce.isoformat()))
+        s = ce + dt.timedelta(days=1)
+    return out
 
 
 def main() -> None:
