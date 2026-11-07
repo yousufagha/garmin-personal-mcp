@@ -64,6 +64,15 @@ def test_daily_sleep_hrv(api):
     assert h["last_night_avg_ms"] == 61 and h["status"] == "BALANCED" and h["baseline"]["balancedLow"] == 53
 
 
+def test_sleep_epoch_ms_and_te_rounding():
+    from garmin_personal_mcp import trim
+    # observed live: local sleep timestamps arrive as epoch ms, TE as float32 noise
+    s = trim.sleep({"calendarDate": "2026-11-07", "sleepStartTimestampLocal": 1794012137000, "sleepTimeSeconds": 3600})
+    assert s["start_local"] == "2026-11-07T00:42:17"
+    a = trim.activity_list_item({"activityId": 1, "aerobicTrainingEffect": 3.5999999046325684})
+    assert a["aerobic_te"] == 3.6
+
+
 def test_hrv_no_content_is_unavailable(api):
     api.get(B + "/hrv-service/hrv/2026-11-07").mock(return_value=httpx.Response(204))
     assert server.hrv("2026-11-07") == {"date": "2026-11-07", "available": False}

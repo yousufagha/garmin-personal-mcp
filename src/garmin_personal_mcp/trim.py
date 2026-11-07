@@ -27,6 +27,15 @@ def _min(s: Any) -> Any:
     return _r(s / 60, 1) if isinstance(s, (int, float)) else None
 
 
+def _ts(v: Any) -> Any:
+    """Garmin returns some 'local' timestamps as epoch ms despite the spec saying string.
+    Local timestamps are encoded as if UTC, so format them in UTC to keep wall-clock time."""
+    if isinstance(v, (int, float)):
+        import datetime as dt
+        return dt.datetime.fromtimestamp(v / 1000, dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+    return v
+
+
 def _pace(speed_mps: Any) -> str | None:
     """m/s -> 'M:SS /km'."""
     if not isinstance(speed_mps, (int, float)) or speed_mps <= 0:
@@ -66,8 +75,8 @@ def activity_list_item(a: Json) -> Json:
             "max_hr_bpm": a.get("maxHR"),
             "elev_gain_m": _r(a.get("elevationGain")),
             "avg_cadence_spm": _r(a.get("averageRunningCadenceInStepsPerMinute"), 0),
-            "aerobic_te": a.get("aerobicTrainingEffect"),
-            "anaerobic_te": a.get("anaerobicTrainingEffect"),
+            "aerobic_te": _r(a.get("aerobicTrainingEffect")),
+            "anaerobic_te": _r(a.get("anaerobicTrainingEffect")),
             "te_label": a.get("trainingEffectLabel"),
             "training_load": _r(a.get("activityTrainingLoad")),
             "vo2max": a.get("vO2MaxValue"),
@@ -119,8 +128,8 @@ def activity_detail(d: Json, list_item: Json | None = None) -> Json:
         ),
         "avg_cadence_spm": _r(s.get("averageRunCadence"), 0),
         "elev_gain_m": _r(s.get("elevationGain")),
-        "aerobic_te": s.get("trainingEffect"),
-        "anaerobic_te": s.get("anaerobicTrainingEffect"),
+        "aerobic_te": _r(s.get("trainingEffect")),
+        "anaerobic_te": _r(s.get("anaerobicTrainingEffect")),
         "te_label": s.get("trainingEffectLabel"),
         "training_load": _r(s.get("activityTrainingLoad")),
         "calories": _r(s.get("calories"), 0),
@@ -167,8 +176,8 @@ def sleep(d: Json) -> Json:
     return _clean(
         {
             "date": d.get("calendarDate"),
-            "start_local": d.get("sleepStartTimestampLocal"),
-            "end_local": d.get("sleepEndTimestampLocal"),
+            "start_local": _ts(d.get("sleepStartTimestampLocal")),
+            "end_local": _ts(d.get("sleepEndTimestampLocal")),
             "total_h": _r((d.get("sleepTimeSeconds") or 0) / 3600, 2) if d.get("sleepTimeSeconds") else None,
             "deep_min": _min(d.get("deepSleepSeconds")),
             "light_min": _min(d.get("lightSleepSeconds")),
