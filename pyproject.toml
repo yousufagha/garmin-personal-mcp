@@ -1,0 +1,29 @@
+[project]
+name = "garmin-personal-mcp"
+version = "0.1.0"
+description = "Read-only MCP server for your own Garmin data via the official Garmin Connect Personal API"
+readme = "README.md"
+authors = [
+    { name = "Yousuf Agha", email = "yousufagha@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1",
+    "mcp>=2.3,<3",
+]
+
+[project.scripts]
+garmin-personal-mcp = "garmin_personal_mcp.server:main"
+
+[build-system]
+requires = ["uv_build>=0.12.1,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "respx>=0.23.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,46 @@
+[
+ {
+  "activityId": 20811111111,
+  "activityName": "Melbourne Running",
+  "startTimeLocal": "2026-11-07 06:42:10",
+  "startTimeGMT": "2026-11-06 19:42:10",
+  "activityType": {
+   "typeId": 1,
+   "typeKey": "running",
+   "parentTypeId": 17
+  },
+  "distance": 8012.4,
+  "duration": 2735.2,
+  "movingDuration": 2710.0,
+  "elevationGain": 41.0,
+  "averageSpeed": 2.929,
+  "maxSpeed": 3.8,
+  "averageHR": 152.0,
+  "maxHR": 171.0,
+  "averageRunningCadenceInStepsPerMinute": 168.3,
+  "aerobicTrainingEffect": 3.2,
+  "anaerobicTrainingEffect": 0.8,
+  "trainingEffectLabel": "TEMPO",
+  "activityTrainingLoad": 118.6,
+  "vO2MaxValue": 51.0,
+  "calories": 612.0,
+  "hrTimeInZone_1": 120.0,
+  "hrTimeInZone_2": 540.0,
+  "hrTimeInZone_3": 1500.0,
+  "hrTimeInZone_4": 560.0,
+  "hrTimeInZone_5": 15.2,
+  "ownerFullName": "Should Be Trimmed",
+  "startLatitude": -37.81,
+  "maxAvgPower_1": null
+ },
+ {
+  "activityId": 20800000000,
+  "activityName": "Strength",
+  "startTimeLocal": "2026-11-05 18:00:00",
+  "activityType": {
+   "typeKey": "strength_training"
+  },
+  "duration": 1800.0,
+  "averageHR": 110.0
+ }
+]

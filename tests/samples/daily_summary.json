@@ -1,0 +1,23 @@
+{
+ "calendarDate": "2026-11-07",
+ "totalSteps": 14210,
+ "totalDistanceMeters": 11034,
+ "activeKilocalories": 905.0,
+ "totalKilocalories": 2810.0,
+ "restingHeartRate": 49,
+ "lastSevenDaysAvgRestingHeartRate": 50,
+ "minHeartRate": 47,
+ "maxHeartRate": 171,
+ "moderateIntensityMinutes": 12,
+ "vigorousIntensityMinutes": 44,
+ "averageStressLevel": 28,
+ "maxStressLevel": 91,
+ "bodyBatteryHighestValue": 88,
+ "bodyBatteryLowestValue": 24,
+ "bodyBatteryAtWakeTime": 86,
+ "bodyBatteryChargedValue": 62,
+ "bodyBatteryDrainedValue": 64,
+ "averageSpo2": 96.0,
+ "avgWakingRespirationValue": 14.0,
+ "displayName": "trim-me"
+}

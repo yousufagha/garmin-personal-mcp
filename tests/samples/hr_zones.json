@@ -1,0 +1,22 @@
+[
+ {
+  "sport": "DEFAULT",
+  "zone1Floor": 98,
+  "zone2Floor": 118,
+  "zone3Floor": 137,
+  "zone4Floor": 157,
+  "zone5Floor": 176,
+  "maxHeartRateUsed": 196,
+  "trainingMethod": "HR_MAX"
+ },
+ {
+  "sport": "RUNNING",
+  "zone1Floor": 100,
+  "zone2Floor": 120,
+  "zone3Floor": 140,
+  "zone4Floor": 158,
+  "zone5Floor": 175,
+  "maxHeartRateUsed": 195,
+  "trainingMethod": "LACTATE_THRESHOLD"
+ }
+]

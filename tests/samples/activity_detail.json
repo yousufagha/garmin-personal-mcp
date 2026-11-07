@@ -1,0 +1,50 @@
+{
+ "activityId": 20811111111,
+ "activityName": "Melbourne Running",
+ "activityTypeDTO": {
+  "typeId": 1,
+  "typeKey": "running"
+ },
+ "summaryDTO": {
+  "startTimeLocal": "2026-11-07T06:42:10.0",
+  "distance": 8012.4,
+  "duration": 2735.2,
+  "movingDuration": 2710.0,
+  "averageSpeed": 2.929,
+  "averageMovingSpeed": 2.956,
+  "avgGradeAdjustedSpeed": 2.94,
+  "averageHR": 152.0,
+  "maxHR": 171.0,
+  "minHR": 96.0,
+  "recoveryHeartRate": 31,
+  "averageRunCadence": 168.3,
+  "elevationGain": 41.0,
+  "trainingEffect": 3.2,
+  "anaerobicTrainingEffect": 0.8,
+  "trainingEffectLabel": "TEMPO",
+  "activityTrainingLoad": 118.6,
+  "calories": 612.0,
+  "leftPowerPhaseStart": null
+ },
+ "splitSummaries": [
+  {
+   "splitType": "RWD_RUN",
+   "noOfSplits": 1,
+   "distance": 7900.0,
+   "duration": 2680.0,
+   "averageSpeed": 2.948,
+   "averageHR": 153.0,
+   "maxHR": 171.0,
+   "averageRunCadence": 169.0,
+   "elevationGain": 40.0
+  },
+  {
+   "splitType": "RWD_WALK",
+   "noOfSplits": 2,
+   "distance": 112.4,
+   "duration": 55.2,
+   "averageSpeed": 2.04,
+   "averageHR": 140.0
+  }
+ ]
+}
